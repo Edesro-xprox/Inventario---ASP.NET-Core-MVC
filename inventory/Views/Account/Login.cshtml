@@ -1,0 +1,79 @@
+@model inventory.Models.UserLogin
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Head {
+    <link rel="stylesheet" href="/css/login.css"/>
+}
+
+<div class="grid-bg"></div>
+
+<div class="flex justify-center items-center h-full">
+    <main class="login-wrapper">
+        <div class="login-card @(ViewData.ModelState.IsValid ? "" : "shake")" id="loginCard">
+            <div class="card-header">
+                <h1 class="card-title text-center">Control de Inventario</h1>
+                <p class="card-subtitle text-center">Ingresa tus credenciales para continuar</p>
+            </div>
+
+            <form method="post" asp-controller="Account" asp-action="Login">
+                <div class="field">
+                    <label for="usuario">Usuario</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text"
+                               id="usuario"
+                               name="Username"
+                               value="@(Model?.Username ?? string.Empty)"
+                               placeholder="Ej: admin@empresa.com"
+                               autocomplete="username" />
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="password">Contraseña</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password"
+                               id="password"
+                               name="Password"
+                               placeholder="••••••••"
+                               autocomplete="current-password" />
+                        <button class="toggle-pass" id="togglePass" type="button" aria-label="Mostrar contraseña">
+                            <i class="fas fa-eye" id="toggleIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                @* <div class="extras">
+                    <a href="#" class="forgot">¿Olvidaste tu contraseña?</a>
+                </div> *@
+
+                <button class="btn-login" id="btnLogin" type="submit">
+                    <div class="spinner"></div>
+                    <span class="btn-text"><i class="fas fa-right-to-bracket"></i>&nbsp; Ingresar</span>
+                </button>
+            </form>
+        </div>
+    </main>
+</div>
+
+@section Scripts {
+  <script>
+    // Toggle password visibility
+    (function(){
+      const togglePass = document.getElementById('togglePass');
+      const toggleIcon = document.getElementById('toggleIcon');
+      const passInput  = document.getElementById('password');
+      if(togglePass){
+        togglePass.addEventListener('click', () => {
+          const isHidden = passInput.type === 'password';
+          passInput.type = isHidden ? 'text' : 'password';
+          toggleIcon.className = isHidden ? 'fas fa-eye-slash' : 'fas fa-eye';
+        });
+      }
+    })();
+  </script>
+}

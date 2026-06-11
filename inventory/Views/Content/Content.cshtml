@@ -1,0 +1,146 @@
+@{
+    ViewData["Title"] = "Content";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Head {
+    <link rel="stylesheet" href="/css/content.css"/>
+}
+
+<div class="min-h-screen flex bg-gray-100">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 w-72 bg-[#0f1724] text-white transform -translate-x-full md:translate-x-0 transition-transform duration-200 z-40">
+        <div class="p-6">
+            <div class="flex items-center gap-3 mb-6 relative">
+                <div id="companyIcon" class="w-10 h-10 bg-gradient-to-br from-[#63b3ed] to-[#4fd1c5] rounded-lg flex items-center justify-center text-[#0b0f1a] font-bold">
+                    <i class="fas fa-utility fa-semibold fa-code"></i>
+                </div>
+                <div class="logo-text">
+                    <div class="font-extrabold text-lg">DevEspinoza</div>
+                    <div class="text-xs text-gray-400">Panel de control</div>
+                </div>
+
+                <!-- Collapse button for desktop -->
+                <button id="btnCollapse" title="Colapsar menú" class="hidden md:inline-flex absolute top-0 right-0 mt-1 mr-1 p-1 rounded-md text-gray-300 hover:bg-[rgba(255,255,255,0.02)]">
+                    <i class="fas fa-bars" id="collapseIcon"></i>
+                </button>
+            </div>
+
+            <nav class="space-y-1 nav-item nav-menus">
+                
+            </nav>
+
+        </div>
+
+        <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-[rgba(255,255,255,0.03)]">
+            <a href="/" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[rgba(255,255,255,0.03)]">
+                <i class="fas fa-sign-out-alt w-4"></i>
+                <span id="logoutText">Cerrar sesión</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Overlay for mobile when sidebar open -->
+    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-40 hidden z-30"></div>
+
+    <!-- Main content area -->
+    <div id="mainContent" class="flex-1 md:ml-72">
+        <header class="flex items-center justify-between bg-white p-4 shadow">
+            <div class="flex items-center gap-3">
+                <button id="btnToggle" class="md:hidden p-2 rounded-md bg-white border border-[rgba(0,0,0,0.04)]">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h2 class="text-lg font-semibold">Panel de control</h2>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="text-sm text-gray-600">Administrador</div>
+                <img src="https://via.placeholder.com/36" class="w-9 h-9 rounded-full" alt="avatar" />
+            </div>
+        </header>
+
+        <main class="p-6 bg-white min-h-[calc(100vh-64px)] main-content">
+            
+        </main>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function(){
+            const sidebar = document.getElementById('sidebar');
+            const btn = document.getElementById('btnToggle');
+            const overlay = document.getElementById('overlay');
+            const btnCollapse = document.getElementById('btnCollapse');
+            const mainContent = document.getElementById('mainContent');
+            const companyIcon = document.getElementById('companyIcon');
+            const logoutText = document.getElementById('logoutText');
+            
+            function openSidebar() {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            }
+            function closeSidebar() {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+
+            btn && btn.addEventListener('click', function(){
+                if (sidebar.classList.contains('-translate-x-full')) openSidebar(); else closeSidebar();
+            });
+
+            overlay && overlay.addEventListener('click', closeSidebar);
+
+            // Collapse (desktop) toggle
+            if (btnCollapse) {
+                btnCollapse.addEventListener('click', function(){
+                    const isCollapsed = sidebar.classList.toggle('collapsed');
+                    // toggle main content margin classes for desktop
+                    if (mainContent) {
+                        mainContent.classList.toggle('md:ml-72');
+                        mainContent.classList.toggle('md:ml-20');
+                    }
+                    companyIcon.classList.toggle('hidden');
+                    logoutText.classList.toggle('hidden');
+                });
+            }
+
+            // Ensure sidebar state on resize
+            window.addEventListener('resize', function(){
+                if (window.innerWidth >= 768) {
+                    sidebar.classList.remove('-translate-x-full');
+                    overlay.classList.add('hidden');
+                } else {
+                    sidebar.classList.add('-translate-x-full');
+                }
+            });
+
+            // initialize correct state
+            if (window.innerWidth < 768) sidebar.classList.add('-translate-x-full');
+
+            // Delegate submenu toggle handling so dynamically injected menus work
+            const navMenusContainer = document.querySelector('.nav-menus');
+            if (navMenusContainer) {
+                // collapse any existing submenus
+                navMenusContainer.querySelectorAll('.submenu').forEach(s => s.style.maxHeight = '0px');
+
+                navMenusContainer.addEventListener('click', function (e) {
+                    const btnEl = e.target.closest('.menu-toggle');
+                    if (!btnEl || !navMenusContainer.contains(btnEl)) return;
+                    const submenu = btnEl.nextElementSibling;
+                    if (!submenu) return;
+                    const isOpen = btnEl.getAttribute('aria-expanded') === 'true';
+                    btnEl.setAttribute('aria-expanded', String(!isOpen));
+                    const icon = btnEl.querySelector('i.fas.fa-chevron-right');
+                    if (!isOpen) {
+                        submenu.style.maxHeight = submenu.scrollHeight + 'px';
+                        if (icon) icon.classList.add('rotate-90');
+                    } else {
+                        submenu.style.maxHeight = '0px';
+                        if (icon) icon.classList.remove('rotate-90');
+                    }
+                });
+            }
+        })();
+    </script>
+    <script type="module" src="/js/pages/menu.js"></script>
+}

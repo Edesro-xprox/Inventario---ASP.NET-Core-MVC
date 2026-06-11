@@ -1,0 +1,212 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg: #0b0f1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: rgba(255,255,255,0.08);
+    --border-focus: rgba(99, 179, 237, 0.6);
+    --accent: #63b3ed;
+    --accent2: #4fd1c5;
+    --text: #f0f4ff;
+    --muted: #8a96b0;
+    --font-body: 'Robot', sans-serif;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+}
+
+.grid-bg {
+    position: fixed;
+    inset: 0;
+    background-image: linear-gradient(rgba(99,179,237,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(99,179,237,0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    z-index: 0;
+}
+
+.login-wrapper {
+    z-index: 10;
+    max-width: 550px;
+    padding: 2rem;
+}
+
+.login-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 20px 20px 0 0;
+}    
+
+.card-title {
+    font-family: var(--font-body);
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.3rem;
+}
+
+.card-subtitle {
+    font-size: 0.88rem;
+    color: var(--muted);
+}
+
+.field {
+    margin-top: 2rem;
+    margin-bottom: 1.25rem;
+}
+
+.field label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 14px;
+    color: var(--muted);
+    font-size: 0.9rem;
+    pointer-events: none;
+}
+
+.input-wrapper input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem 1rem 0.75rem 2.75rem;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--text);
+    outline: none;
+}
+
+.input-wrapper input::placeholder {
+    color: rgba(138,150,176,0.5);
+}
+
+.input-wrapper input:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(99,179,237,0.12);
+}
+
+.input-wrapper input:focus + .input-icon, .input-wrapper:focus-within .input-icon {
+    color: var(--accent);
+}
+
+.toggle-pass {
+    position: absolute;
+    right: 14px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 0.88rem;
+    padding: 0;
+}
+
+.extras {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin-bottom: 1.75rem;
+    font-size: 0.83rem;
+}
+
+.forgot {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.btn-login {
+    width: 100%;
+    background: linear-gradient(135deg, #2563eb, #0891b2);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 0.85rem;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-login .spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: none;
+}
+
+.btn-login.loading .btn-text {
+    display: none;
+}
+
+.btn-login.loading .spinner {
+    display: block;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.shake {
+    animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    10%, 90% {
+        transform: translateX(-3px);
+    }
+
+    20%, 80% {
+        transform: translateX(4px);
+    }
+
+    30%, 50%, 70% {
+        transform: translateX(-4px);
+    }
+
+    40%, 60% {
+        transform: translateX(4px);
+    }
+}

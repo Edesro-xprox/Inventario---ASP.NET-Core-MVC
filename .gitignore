@@ -1,0 +1,62 @@
+## =======================================================================
+## Archivos de Compilación y Salida de .NET
+## =======================================================================
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Re]leasePublic/
+x64/
+x86/
+[Aa]rm/
+[Aa]rm64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ex]ternal/
+
+## =======================================================================
+## Archivos y Carpetas de Visual Studio / Herramientas
+## =======================================================================
+.vs/
+.idea/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.opensdf
+*.sdf
+*.pidb
+*.glo
+*.generated.*
+[Tt]est[Rr]esults/
+
+## =======================================================================
+## Configuración de Secretos y Entornos (¡MUY IMPORTANTE!)
+## =======================================================================
+# Descomenta la siguiente línea si usas secretos locales en desarrollo
+# secretmanager/
+# appsettings.Development.json
+
+## =======================================================================
+## Dependencias del Frontend (Si usas npm, libman o bower en tu MVC)
+## =======================================================================
+node_modules/
+bower_components/
+wwwroot/lib/
+
+## =======================================================================
+## Archivos del Sistema Operativo
+## =======================================================================
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+## =======================================================================
+## Herramientas de Publicación / Deploy
+## =======================================================================
+*.publish.htm
+*.azureauth
+*.pubxml
+*.pubxml.user

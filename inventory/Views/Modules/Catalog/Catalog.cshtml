@@ -1,0 +1,111 @@
+﻿<div class="hidden" data-menu="@ViewBag.menu"></div>
+<div class="">
+    <div class="flex justify-between mb-2">
+        <div class="">
+            <label class="input flex items-center gap-2 max-w-xs">
+                <input type="text" class="grow search-catalog" placeholder="Buscar..." />
+                <svg xmlns="http://w3.org" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70">
+                    <path fill-rule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clip-rule="evenodd" />
+                </svg>
+            </label>
+
+        </div>
+        <div>
+            <button class="btn btn-neutral btn-xs btnAdd" onclick="mdlChange.showModal()">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+            </button>
+            <button class="btn btn-neutral btn-xs btnFilter">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
+                </svg>
+            </button>
+            <button class="btn btn-neutral btn-xs btnActive">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+    </div>
+    <table class="table">
+        <!-- head -->
+        <thead>
+            <tr>
+                <th>
+                    <label>
+                        <input type="checkbox" class="checkbox" />
+                    </label>
+                </th>
+                <th class="catalog-name">Nombre</th>
+                @if (ViewBag.Menu == "models")
+                {   
+                    <th class="catalog-brand">Marca</th>
+                }
+                <th class="catalog-state">
+                    <div class="flex items-center gap-1">
+                        <span>Estado</span>
+                        <div class="dropdown dropdown-end">
+                            <div tabindex="0" role="button" class="btn btn-ghost btn-xs btn-circle">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
+                                </svg>
+                            </div>
+                            <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-40 p-2 shadow border border-base-200 text-sm font-normal">
+                                <li><a class="filter-status filter-catalog" data-status="all">Todos</a></li>
+                                <li><a class="filter-status text-success filter-catalog" data-status="active">Activos</a></li>
+                                <li><a class="filter-status text-error filter-catalog" data-status="inactive">Inactivos</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody class="catalog-data">
+            
+        </tbody>
+    </table>
+</div>
+
+<dialog id="mdlChange" class="modal">
+    <div class="modal-box">
+        <h3 class="text-lg font-bold mdl-title"></h3>
+        <div class="modal-action mdl-body">
+            <form method="dialog" class="frm-mdlChange" style="width:100%;">
+                <div style="margin-bottom:2rem;">
+                    <label>Nombre:</label>
+                    <input type="text" class="frm-name" />
+                </div>
+                @if (ViewBag.Menu == "models")
+                {
+                    <div style="margin-bottom:2rem;">
+                        <label>Marca:</label>
+                        <select class="list-brands" style="width: 40%;">
+                        </select>
+                    </div>
+                }
+                <div class="frm-section-button" style="text-align:right;">
+                    <button type="button" class="btn btnSaveChange">Guardar</button>
+                    <button class="btn">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</dialog>
+
+<dialog id="mdlActive" class="modal">
+    <div class="modal-box">
+        <h3 class="text-lg font-bold mdl-title-active"></h3>
+        <div class="modal-action" style="display: flex; flex-direction: column; gap: 2rem; align-items: center;">
+            <div>
+                <p class="question-active"></p>
+            </div>
+            <form method="dialog" style="text-align:center; width: 100%;">
+                <button type="button" class="btn btnSaveActive">Guardar</button>
+
+                <button class="btn">Cancelar</button>
+            </form>
+        </div>
+    </div>
+</dialog>
