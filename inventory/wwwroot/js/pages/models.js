@@ -1,5 +1,6 @@
 ﻿import Catalog from './catalog.js';
 import CATALOG from '../providers/catalogProvider.js';
+import NOTIFICATIONS from '../utils/notifications.js';
 
 class Model {
     constructor() {
@@ -37,11 +38,11 @@ class Model {
                 <td>
                     <div>
                         ${b.bActive ?
-                            `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="green" class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                             </svg>`:
                             `
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="red" class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                             </svg>
                             `
@@ -81,6 +82,13 @@ class Model {
     }
 
     events() {
+        //Método keyup del input buscador
+        $('.search-catalog').keyup((e) => {
+            const word = $('.search-catalog').val();
+            this.data = [...this.catalog.data.filter(c => (c.vNameModel.includes(word) || c.vNameBrand.includes(word)))];
+            this.html();
+        });
+
         $('.btnAdd').click(() => {
             this.model = null;
             $('.frm-name').val('');
@@ -108,6 +116,16 @@ class Model {
             const name = $('.frm-name').val();
             const brandId = $('.list-brands').val();
             let res = false;
+
+            // validate form
+            if (!name || String(name).trim() === '') {
+                NOTIFICATIONS.toast('warning', 'Debe llenar el formulario');
+                return;
+            }
+            if (!brandId) {
+                NOTIFICATIONS.toast('warning', 'Seleccione una marca');
+                return;
+            }
 
             if (Boolean(this.model?.id)) {
                 res = await this.catalog.putCatalog(this.catalog.code, this.model.id, name, brandId);

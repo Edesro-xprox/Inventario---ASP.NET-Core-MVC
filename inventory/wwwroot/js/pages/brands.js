@@ -1,4 +1,5 @@
 ﻿import Catalog from './catalog.js';
+import NOTIFICATIONS from '../utils/notifications.js';
 
 class Brand {
     constructor() {
@@ -10,7 +11,7 @@ class Brand {
 
     async init() {
         // take data from shared catalog instance (already initialized by menu loader)
-        this.data = [...this.catalog.data] || [];
+        this.data = [...this.catalog.data.filter(c => c.bActive)] || [];
         this.html();
         this.events();
     }
@@ -20,7 +21,7 @@ class Brand {
             <tr>
                 <th>
                     <label>
-                        <input type="checkbox" class="checkbox" />
+                        <input type="checkbox" class="checkbox" data-select='{ "id": ${b.iBrandId} }' />
                     </label>
                 </th>
                 <td>
@@ -31,11 +32,11 @@ class Brand {
                 <td>
                     <div>
                         ${b.bActive ?
-                            `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="green" class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                             </svg>`:
                             `
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="red" class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                             </svg>
                             `
@@ -44,18 +45,18 @@ class Brand {
                 </td>
                 <th>
                     <button class="btn btn-ghost btn-xs btnEdit" data-info='{ "id": ${b.iBrandId}, "name": "${b.vNameBrand}", "active": ${b.bActive} }', onclick="mdlChange.showModal()">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#0F1724" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                         </svg>
                     </button>
                     <button class="btn btn-ghost btn-xs btnActive" data-active= '{ "id": ${b.iBrandId}, "name": "${b.vNameBrand}", "active": ${b.bActive} }' onclick="mdlActive.showModal()">
                         ${b.bActive ?
                             `
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#0F1724" class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                             </svg>
                             `:
-                            `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#0F1724" class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                             </svg>
                             `
@@ -69,13 +70,21 @@ class Brand {
     }
 
     events() {
+        //Método keyup del input buscador
+        $('.search-catalog').keyup((e) => {
+            const word = $('.search-catalog').val();
+            this.data = [...this.catalog.data.filter(c => c.vNameBrand.includes(word))];
+            this.html();
+        });
+
+        //Método clic del botón Agregar con ícono +
         $('.btnAdd').click(() => {
             this.brand = null;
             $('.frm-name').val('');
             $('.mdl-title').text(this.brand?.id ? 'Editar ' : 'Agregar ' + 'marca');
         });
 
-        //Delegación del evento click a elementos con clase .btnEdit y .btnActive
+        //Delegación del evento click para la edición de regsitros
         $(document).on('click','.btnEdit', (e) => {
             const info = $(e.currentTarget).data('info');
             this.brand = {...info}
@@ -83,6 +92,7 @@ class Brand {
             $('.mdl-title').text('Editar marca');
         });
 
+        //Delegación del evento click para activar o desactivar registros
         $(document).on('click', '.btnActive', async (e) => {
             const info = $(e.currentTarget).data('active');
             this.brand = { ...info };
@@ -92,8 +102,21 @@ class Brand {
             `);
         });
 
+        //Método clic para desactivar múltiples registros
+        $('.btnSelectDeactivate').click((e) => {
+            debugger
+            const ids = $(e.currentTarget).data('select');
+        });
+
+        //Método clic del botón Guardar cambios de los registros
         $('.btnSaveChange').click(async () => {
             const name = $('.frm-name').val();
+            // validate form
+            if (!name || String(name).trim() === '') {
+                NOTIFICATIONS.toast('warning', 'Debe llenar el formulario');
+                return;
+            }
+
             let res = false;
             
             if (Boolean(this.brand?.id)) {
@@ -110,6 +133,7 @@ class Brand {
             }
         });
 
+        //Método clic del botón Aceptar para activar o desactivar registros
         $('.btnSaveActive').click(async () => {
             const res = await this.catalog.activeData(this.catalog.code, this.brand.id, !this.brand.active);
             if (res) {
@@ -120,8 +144,10 @@ class Brand {
             }
         });
 
+        //Método clic para el input de buscador
         $('.filter-catalog').click((e) => {
             const status = $(e.currentTarget).data('status');
+            console.log(status);
             if (status != 'all') {
                 this.data = [...this.catalog.data.filter(d => d.bActive == (status == 'active' ? true : false))]
             } else {

@@ -1,0 +1,10 @@
+.toast-catalog {
+    /*position: absolute;*/
+    opacity: 1;
+    transition: opacity 0.5s ease;
+    /*z-index: 9999;*/
+}
+
+.toast-hide {
+    opacity: 0;
+}

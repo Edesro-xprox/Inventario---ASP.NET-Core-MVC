@@ -8,13 +8,20 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/@@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/inventory.css" />
     <meta name="theme-color" content="#0ea5a4" />
     @RenderSection("Head", required: false)
 </head>
 <body class="h-screen">
     @RenderBody()
+    <div class="toast toast-center toast-catalog toast-hide w-100">
+        <div class="toast-type alert">
+            <div class="toast-icon"></div>
+            <span class="toast-message text-white"></span>
+        </div>
+    </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/js/utils/notifications.js"></script>
+    <script type="module" src="~/js/utils/notifications.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

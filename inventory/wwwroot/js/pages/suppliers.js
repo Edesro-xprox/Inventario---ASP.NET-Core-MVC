@@ -1,4 +1,5 @@
 ﻿import Catalog from './catalog.js';
+import NOTIFICATIONS from '../utils/notifications.js';
 
 class Supplier {
     constructor() {
@@ -30,11 +31,11 @@ class Supplier {
                 <td>
                     <div>
                         ${s.bActive ?
-                            `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="green" class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                             </svg>`:
                             `
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="red" class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                             </svg>
                             `
@@ -69,6 +70,13 @@ class Supplier {
     }
 
     events() {
+        //Método keyup del input buscador
+        $('.search-catalog').keyup((e) => {
+            const word = $('.search-catalog').val();
+            this.data = [...this.catalog.data.filter(c => c.vNameSupplier.includes(word))];
+            this.html();
+        });
+
         $('.btnAdd').click(() => {
             this.supplier = null;
             $('.frm-name').val('');
@@ -94,7 +102,12 @@ class Supplier {
         $('.btnSaveChange').click(async () => {
             const name = $('.frm-name').val();
             let res = false;
-
+            
+            if (!Boolean(name)) {
+                NOTIFICATIONS.toast('warning', 'Debe llenar el formulario');
+                return;
+            };
+            
             if (Boolean(this.supplier?.id)) {
                 res = await this.catalog.putCatalog(this.catalog.code, this.supplier.id, name, 0);
             } else {
