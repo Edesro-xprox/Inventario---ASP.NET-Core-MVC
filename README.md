@@ -62,6 +62,10 @@ Cómo ejecutar
 y ejecutar los archivos sql de la carpeta scripts en el orden de las fechas puestas en los nombres (el formato es fecha_hora_eespinoza.sql,
 ejemplo 20260415_2252_eespinoza.sql).
 
+7. Accesos
+   - usuario: admin
+   - contraseña: 123
+
 Autor
 -----
 Repositorio original: `Edesro-xprox/Inventario---ASP.NET-Core-MVC` (autor del repo)
