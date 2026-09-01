@@ -80,7 +80,15 @@ class Menus {
                 console.error('Menu view load failed', res.status);
                 return;
             }
+
             const html = await res.text();
+
+            $('.nameMenu').text(
+                menu == 'brands' ? 'Marcas' :
+                    menu == 'models' ? 'Modelos' :
+                        menu == 'suppliers' ? 'Proveedores' : 'Categorias'
+            );
+
             $('.main-content').html(html);
 
             // initialize shared catalog singleton (reads data-menu from injected partial)

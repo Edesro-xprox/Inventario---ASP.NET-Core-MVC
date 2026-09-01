@@ -78,7 +78,7 @@ namespace inventory.Data
             }
         }
 
-        public async Task<int> activeCatalog(string code, int id, bool active)
+        public async Task<int> activeCatalog(string code, string ids, bool active)
         {
             var connection = _context.Database.GetDbConnection();
             using (var command = connection.CreateCommand())
@@ -86,7 +86,7 @@ namespace inventory.Data
                 command.CommandText = "spu_active";
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.Add(new SqlParameter("@code", code));
-                command.Parameters.Add(new SqlParameter("@id", id));
+                command.Parameters.Add(new SqlParameter("@ids", ids));
                 command.Parameters.Add(new SqlParameter("@active", active ? 1 : 0));
 
                 if (connection.State != ConnectionState.Open)

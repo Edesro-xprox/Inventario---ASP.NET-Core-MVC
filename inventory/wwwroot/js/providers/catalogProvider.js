@@ -62,8 +62,8 @@ const CATALOG = {
         return res;
     },
 
-    activeCatalog: async (code, id, active) => {
-        const data = { code, id, active }
+    activeCatalog: async (code, ids, active) => {
+        const data = { code, ids, active }
         const res = await fetch(`${BASE_URL}/PatchCatalog`, {
             method: "PUT", // 1. Método HTTP
             headers: {

@@ -13,4 +13,4 @@
     }
 }
 
-new Dashboard();
+export default Dashboard;

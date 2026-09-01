@@ -47,7 +47,7 @@ namespace inventory.Controllers
         public async Task<IActionResult> PatchCatalog([FromBody] CatalogActiveDto dto)
         {
             if (dto == null) return BadRequest();
-            var ok = await _catalogService.ActiveCatalog(dto.Code, dto.Id, dto.Active);
+            var ok = await _catalogService.ActiveCatalog(dto.Code, dto.Ids, dto.Active);
             return Ok(new { status = ok });
         }
 

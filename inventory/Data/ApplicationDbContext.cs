@@ -9,7 +9,8 @@ namespace inventory.Data
         {
         }
 
-        public DbSet<User> Users { get; set; } = null!;
+        //DbSet: Representa una tabla
+        public DbSet<User> Users { get; set; } = null!; 
         public DbSet<Menu> Menus { get; set; } = null! ;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

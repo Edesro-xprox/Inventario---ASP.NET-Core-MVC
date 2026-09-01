@@ -53,9 +53,9 @@ namespace inventory.Services
             return rows > 0;
         }
 
-        public async Task<bool> ActiveCatalog(string code, int id, bool active)
+        public async Task<bool> ActiveCatalog(string code, string ids, bool active)
         {
-            var rows = await _catalogRepository.activeCatalog(code, id, active);
+            var rows = await _catalogRepository.activeCatalog(code, ids, active);
             return rows > 0;
         }
     }

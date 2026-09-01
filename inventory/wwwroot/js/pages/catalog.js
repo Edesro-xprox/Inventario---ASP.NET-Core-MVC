@@ -1,4 +1,5 @@
 ﻿import CATALOG from '../providers/catalogProvider.js';
+import NOTIFICATIONS from '../utils/notifications.js';
 
 class Catalog {
     constructor() {
@@ -52,9 +53,9 @@ class Catalog {
         }
     }
 
-    async activeData(code, id, active) {
+    async activeData(code, ids, active) {
         try {
-            const res = await CATALOG.activeCatalog(code, id, active);
+            const res = await CATALOG.activeCatalog(code, ids, active);
             if (res.status) {
                 console.log('Petición patch con éxito');
                 return res.status;

@@ -24,6 +24,7 @@ namespace inventory.Controllers
         public IActionResult MenuRender(string menu)
         {
             ViewBag.menu = menu;
+
             return menu switch
             {
                 "models" or "brands" or "categories" or "suppliers" => PartialView("~/Views/Modules/Catalog/Catalog.cshtml"),

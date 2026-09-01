@@ -8,6 +8,8 @@ class Model {
         this.catalog = Catalog;
         this.data = null;
         this.model = null;
+        this.ids = [];
+        this.active = null;
     }
 
     async init() {
@@ -22,7 +24,7 @@ class Model {
             <tr>
                 <th>
                     <label>
-                        <input type="checkbox" class="checkbox" />
+                        <input type="checkbox" class="modelIds" data-select='{ "id": ${b.iModelId}, "active": ${b.bActive} }' />
                     </label>
                 </th>
                 <td>
@@ -89,6 +91,43 @@ class Model {
             this.html();
         });
 
+        //Método clic para activar múltiples registros
+        $(document)
+            .off('click', '.btnSelectActivate,.btnSelectDeactivate')
+            .on('click', '.btnSelectActivate,.btnSelectDeactivate', (e) => {
+            let classElement = $(e.currentTarget).attr('class');
+            this.active = classElement.includes('btnSelectActivate') ? true : false;
+            let selected = [];
+            
+            $('.modelIds:checked').each((i, el) => {
+                const raw = $(el).attr('data-select');
+                if (!raw) return;
+                const info = JSON.parse(raw);
+                if (info) selected.push(info);
+            });
+            console.log(selected);
+            if (selected.length === 0) {
+                NOTIFICATIONS.toast('warning', 'Seleccione al menos un modelo');
+                return;
+            }
+
+            if (selected.some(s => s.active == this.active)) {
+                $('.mdl-title-message').text('Activar o desactivar registros');
+                $('.message-description').text(`
+                    Para activar registros, solo seleccione registros inactivos y para
+                    desactivar registros, solo seleccione registros activos.
+                `);
+                $('#mdlMessage')[0].show();
+                return;
+            }
+
+            this.ids = [...selected.map(s => s.id)];
+
+            $('.mdl-title-active').text(classElement.includes('btnSelectActivate') ? 'Activar modelos' : 'Desactivar modelos');
+            $('.question-active').text(`¿Desea ${classElement.includes('btnSelectActivate') ? 'activar' : 'desactivar'} este(s) modelo(s)?`);
+            $('#mdlActive')[0].show();
+        });
+
         $('.btnAdd').click(() => {
             this.model = null;
             $('.frm-name').val('');
@@ -151,12 +190,18 @@ class Model {
             this.html();
         });
 
+        //Método clic del botón Aceptar para activar o desactivar registros
         $('.btnSaveActive').click(async () => {
-            const res = await this.catalog.activeData(this.catalog.code, this.model.id, !this.model.active);
+            const res = await this.catalog.activeData(
+                this.catalog.code,
+                this.ids.length == 0 ? this.model?.id : this.ids.join(','),
+                this.ids.length == 0 ? !this.model?.active : this.active
+            );
             if (res) {
                 $('#mdlActive')[0].close();
                 await this.catalog.getData(this.catalog.code);
-                this.data = this.catalog.data;
+                this.data = [...this.catalog.data];
+                this.ids = null;
                 this.html();
             }
         });

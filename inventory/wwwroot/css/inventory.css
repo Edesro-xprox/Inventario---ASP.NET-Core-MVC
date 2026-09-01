@@ -8,3 +8,16 @@
 .toast-hide {
     opacity: 0;
 }
+
+.mdl-title-message{
+    text-align: center;
+}
+
+.message-description{
+    text-align: justify;
+}
+
+.brandIds, .modelIds, .supplierIds, .categoryIds {
+    width: 18px;
+    height: 18px;
+}

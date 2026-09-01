@@ -5,3 +5,10 @@
 .frm-section-button {
     text-align: right;
 }
+
+.btnAdd:hover,
+.btnSelectActivate:hover,
+.btnSelectDeactivate:hover,
+.btnSelectDelete:hover {
+    background-color: #2A384C;
+}

@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link rel="stylesheet" href="~/css/inventory.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <meta name="theme-color" content="#0ea5a4" />
     @RenderSection("Head", required: false)
 </head>
@@ -20,8 +21,24 @@
             <span class="toast-message text-white"></span>
         </div>
     </div>
+    <dialog id="mdlMessage" class="modal">
+        <div class="modal-box">
+            <h3 class="text-lg font-bold mdl-title-message"></h3>
+            <div class="modal-action" style="display: flex; flex-direction: column; gap: 2rem; align-items: center;">
+                <div>
+                    <p class="message-description"></p>
+                </div>
+                <div>
+                    <form method="dialog">
+                        <button class="btn btn-primary">Aceptar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </dialog>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script type="module" src="~/js/utils/notifications.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

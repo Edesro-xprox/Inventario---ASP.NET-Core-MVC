@@ -5,15 +5,16 @@ class Brand {
     constructor() {
         console.log('Brand initialized');
         this.catalog = Catalog;
-        this.data = null;
-        this.brand = null;
+        this.data = null; //arreglo de objetos de la data general
+        this.brand = null; //objeto de un solo registro
+        this.ids = null; //arreglo de id de los registros
+        this.active = null //estado activo o inactivo de la data en general
     }
 
     async init() {
-        // take data from shared catalog instance (already initialized by menu loader)
         this.data = [...this.catalog.data.filter(c => c.bActive)] || [];
-        this.html();
-        this.events();
+        this.html(); //metodo para generar el html
+        this.events(); //metodo de eventos
     }
 
     html() {
@@ -21,7 +22,7 @@ class Brand {
             <tr>
                 <th>
                     <label>
-                        <input type="checkbox" class="checkbox" data-select='{ "id": ${b.iBrandId} }' />
+                        <input type="checkbox" class="brandIds" data-select='{ "id": ${b.iBrandId}, "active": ${b.bActive} }' />
                     </label>
                 </th>
                 <td>
@@ -102,10 +103,41 @@ class Brand {
             `);
         });
 
-        //Método clic para desactivar múltiples registros
-        $('.btnSelectDeactivate').click((e) => {
-            debugger
-            const ids = $(e.currentTarget).data('select');
+        //Método clic para activar múltiples registros
+        $(document)
+            .off('click', '.btnSelectActivate,.btnSelectDeactivate')
+            .on('click', '.btnSelectActivate,.btnSelectDeactivate', (e) => {
+            let classElement = $(e.currentTarget).attr('class');
+            this.active = classElement.includes('btnSelectActivate') ? true : false;
+            let selected = [];
+
+            $('.brandIds:checked').each((i, el) => {
+                const raw = $(el).attr('data-select');
+                if (!raw) return;
+                const info = JSON.parse(raw);
+                if (info) selected.push(info);
+            });
+            console.log(selected);
+            if (selected.length === 0) {
+                NOTIFICATIONS.toast('warning', 'Seleccione al menos una marca');
+                return;
+            }
+            
+            if (selected.some(s => s.active == this.active)) {
+                $('.mdl-title-message').text('Activar o desactivar registros');
+                $('.message-description').text(`
+                    Para activar registros, solo seleccione registros inactivos y para
+                    desactivar registros, solo seleccione registros activos.
+                `);
+                $('#mdlMessage')[0].show();
+                return;
+            }
+
+            this.ids = [...selected.map(s => s.id)];
+
+            $('.mdl-title-active').text(classElement.includes('btnSelectActivate') ? 'Activar marcas' : 'Desactivar marcas');
+            $('.question-active').text(`¿Desea ${classElement.includes('btnSelectActivate') ? 'activar' : 'desactivar'} esta(s) marca(s)?`);
+            $('#mdlActive')[0].show();
         });
 
         //Método clic del botón Guardar cambios de los registros
@@ -135,11 +167,16 @@ class Brand {
 
         //Método clic del botón Aceptar para activar o desactivar registros
         $('.btnSaveActive').click(async () => {
-            const res = await this.catalog.activeData(this.catalog.code, this.brand.id, !this.brand.active);
+            const res = await this.catalog.activeData(
+                this.catalog.code,
+                this.ids.length == 0 ? this.brand?.id : this.ids.join(','),
+                this.ids.length == 0 ? !this.brand?.active : this.active
+            );
             if (res) {
                 $('#mdlActive')[0].close();
                 await this.catalog.getData(this.catalog.code);
                 this.data = [...this.catalog.data];
+                this.ids = null;
                 this.html();
             }
         });

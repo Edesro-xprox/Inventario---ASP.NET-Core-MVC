@@ -7,6 +7,8 @@ class Supplier {
         this.catalog = Catalog;
         this.data = null;
         this.supplier = null;
+        this.ids = [];
+        this.active = null;
     }
 
     async init() {
@@ -20,7 +22,7 @@ class Supplier {
             <tr>
                 <th>
                     <label>
-                        <input type="checkbox" class="checkbox" />
+                        <input type="checkbox" class="supplierIds" data-select='{ "id": ${s.iSupplierId}, "active": ${s.bActive} }' />
                     </label>
                 </th>
                 <td>
@@ -77,6 +79,43 @@ class Supplier {
             this.html();
         });
 
+        //Método clic para activar múltiples registros
+        $(document)
+            .off('click', '.btnSelectActivate,.btnSelectDeactivate')
+            .on('click', '.btnSelectActivate,.btnSelectDeactivate', (e) => {
+            let classElement = $(e.currentTarget).attr('class');
+            this.active = classElement.includes('btnSelectActivate') ? true : false;
+            let selected = [];
+
+            $('.supplierIds:checked').each((i, el) => {
+                const raw = $(el).attr('data-select');
+                if (!raw) return;
+                const info = JSON.parse(raw);
+                if (info) selected.push(info);
+            });
+            console.log(selected);
+            if (selected.length === 0) {
+                NOTIFICATIONS.toast('warning', 'Seleccione al menos un proveedor');
+                return;
+            }
+
+            if (selected.some(s => s.active == this.active)) {
+                $('.mdl-title-message').text('Activar o desactivar registros');
+                $('.message-description').text(`
+                    Para activar registros, solo seleccione registros inactivos y para
+                    desactivar registros, solo seleccione registros activos.
+                `);
+                $('#mdlMessage')[0].show();
+                return;
+            }
+
+            this.ids = [...selected.map(s => s.id)];
+
+            $('.mdl-title-active').text(classElement.includes('btnSelectActivate') ? 'Activar proveedores' : 'Desactivar proveedores');
+            $('.question-active').text(`¿Desea ${classElement.includes('btnSelectActivate') ? 'activar' : 'desactivar'} esto(s) proveedor(s)?`);
+            $('#mdlActive')[0].show();
+        });
+
         $('.btnAdd').click(() => {
             this.supplier = null;
             $('.frm-name').val('');
@@ -122,12 +161,18 @@ class Supplier {
             }
         });
 
+        //Método clic del botón Aceptar para activar o desactivar registros
         $('.btnSaveActive').click(async () => {
-            const res = await this.catalog.activeData(this.catalog.code, this.supplier.id, !this.supplier.active);
+            const res = await this.catalog.activeData(
+                this.catalog.code,
+                this.ids.length == 0 ? this.supplier?.id : this.ids.join(','),
+                this.ids.length == 0 ? !this.supplier?.active : this.active
+            );
             if (res) {
                 $('#mdlActive')[0].close();
                 await this.catalog.getData(this.catalog.code);
-                this.data = this.catalog.data;
+                this.data = [...this.catalog.data];
+                this.ids = null;
                 this.html();
             }
         });

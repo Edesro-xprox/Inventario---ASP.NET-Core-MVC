@@ -8,19 +8,20 @@ using inventory.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+//builder.Services es la coleccion de servicios de la aplicacion donde se registran todas las dependencias antes de construir la web
 builder.Services.AddControllersWithViews();
 
-// Database (SQL Server) - connection string provided in appsettings.json
+//Registra clase de contexto en el contenedor de dependencias
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Authentication and application services
+// Configuracion: Inyeccion de dependencias en la web
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMenuService, MenuService>();
 builder.Services.AddScoped<ICatalogService, CatalogService>();
 builder.Services.AddScoped<ICatalogRepository, CatalogRepository>();
 
+//Autenticacion
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -43,6 +44,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         };
     });
 
+//Crear instancia de la aplicacion y contenedor de dependencias
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())

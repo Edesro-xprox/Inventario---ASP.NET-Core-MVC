@@ -7,6 +7,8 @@ class Category {
         this.catalog = Catalog;
         this.data = null;
         this.category = null;
+        this.ids = [];
+        this.active = null;
     }
 
     async init() {
@@ -20,7 +22,7 @@ class Category {
             <tr>
                 <th>
                     <label>
-                        <input type="checkbox" class="checkbox" />
+                        <input type="checkbox" class="categoryIds" data-select='{ "id": ${c.iCategoryId}, "active": ${c.bActive} }' />
                     </label>
                 </th>
                 <td>
@@ -77,12 +79,14 @@ class Category {
             this.html();
         });
 
+        //Método clic del botón Agregar con ícono +
         $('.btnAdd').click(() => {
             this.category = null;
             $('.frm-name').val('');
             $('.mdl-title').text(Boolean(this.category?.id) ? 'Editar' : 'Agregar' + ' categoría');
         });
 
+        //Delegación del evento click para la edición de registros
         $(document).on('click', '.btnEdit', (e) => {
             const info = $(e.currentTarget).data('info');
             this.category = { ...info };
@@ -90,6 +94,7 @@ class Category {
             $('.mdl-title').text('Editar categoría');
         });
 
+        //Delegación del evento click para activar o desactivar registros
         $(document).on('click', '.btnActive', async (e) => {
             const info = $(e.currentTarget).data('active');
             this.category = { ...info };
@@ -99,6 +104,44 @@ class Category {
             `);
         });
 
+        //Método clic para activar múltiples registros
+        $(document)
+            .off('click', '.btnSelectActivate,.btnSelectDeactivate')
+            .on('click', '.btnSelectActivate,.btnSelectDeactivate', (e) => {
+            let classElement = $(e.currentTarget).attr('class');
+            this.active = classElement.includes('btnSelectActivate') ? true : false;
+            let selected = [];
+
+            $('.categoryIds:checked').each((i, el) => {
+                const raw = $(el).attr('data-select');
+                if (!raw) return;
+                const info = JSON.parse(raw);
+                if (info) selected.push(info);
+            });
+            console.log(selected);
+            if (selected.length === 0) {
+                NOTIFICATIONS.toast('warning', 'Seleccione al menos una categoría');
+                return;
+            }
+
+            if (selected.some(s => s.active == this.active)) {
+                $('.mdl-title-message').text('Activar o desactivar registros');
+                $('.message-description').text(`
+                    Para activar registros, solo seleccione registros inactivos y para
+                    desactivar registros, solo seleccione registros activos.
+                `);
+                $('#mdlMessage')[0].show();
+                return;
+            }
+
+            this.ids = [...selected.map(s => s.id)];
+
+            $('.mdl-title-active').text(classElement.includes('btnSelectActivate') ? 'Activar categorías' : 'Desactivar categorías');
+            $('.question-active').text(`¿Desea ${classElement.includes('btnSelectActivate') ? 'activar' : 'desactivar'} esta(s) categoría(s)?`);
+            $('#mdlActive')[0].show();
+        });
+
+        //Método clic del botón Guardar cambios de los registros
         $('.btnSaveChange').click(async () => {
             const name = $('.frm-name').val();
             // validate form
@@ -123,12 +166,18 @@ class Category {
             }
         });
 
+        //Método clic del botón Aceptar para activar o desactivar registros
         $('.btnSaveActive').click(async () => {
-            const res = await this.catalog.activeData(this.catalog.code, this.category.id, !this.category.active);
+            const res = await this.catalog.activeData(
+                this.catalog.code,
+                this.ids.length == 0 ? this.category?.id : this.ids.join(','),
+                this.ids.length == 0 ? !this.category?.active : this.active
+            );
             if (res) {
                 $('#mdlActive')[0].close();
                 await this.catalog.getData(this.catalog.code);
-                this.data = this.catalog.data;
+                this.data = [...this.catalog.data];
+                this.ids = null;
                 this.html();
             }
         });

@@ -13,4 +13,4 @@
     }
 }
 
-new Configuration();
+export default Configuration;

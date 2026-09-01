@@ -10,6 +10,6 @@ namespace inventory.Data
         Task<DataTable> getCatalog(string code);
         Task<int> insertCatalog(string code, string name, int brandId);
         Task<int> updateCatalog(string code, int id, string name, int brandId);
-        Task<int> activeCatalog(string code, int id, bool active);
+        Task<int> activeCatalog(string code, string ids, bool active);
     }
 }

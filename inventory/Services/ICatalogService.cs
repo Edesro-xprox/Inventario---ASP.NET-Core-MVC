@@ -8,6 +8,6 @@ namespace inventory.Services
         Task<List<Dictionary<string, object>>> GetCatalog(string code);
         Task<bool> InsertCatalog(string code, string name, int brandId);
         Task<bool> UpdateCatalog(string code, int id, string name, int brandId);
-        Task<bool> ActiveCatalog(string code, int id, bool active);
+        Task<bool> ActiveCatalog(string code, string ids, bool active);
     }
 }

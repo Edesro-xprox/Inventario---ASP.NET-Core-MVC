@@ -23,11 +23,11 @@
                     <label for="usuario">Usuario</label>
                     <div class="input-wrapper">
                         <i class="fas fa-user input-icon"></i>
-                        <input type="text"
-                               id="usuario"
-                               name="Username"
-                               value="@(Model?.Username ?? string.Empty)"
-                               placeholder="Ej: admin@empresa.com"
+                        <input type="text" 
+                               id="usuario" 
+                               name="Username" 
+                               value="@(Model?.Username ?? string.Empty)" 
+                               placeholder="Ej: admin@empresa.com" 
                                autocomplete="username" />
                     </div>
                 </div>
@@ -61,19 +61,19 @@
 </div>
 
 @section Scripts {
-  <script>
-    // Toggle password visibility
-    (function(){
-      const togglePass = document.getElementById('togglePass');
-      const toggleIcon = document.getElementById('toggleIcon');
-      const passInput  = document.getElementById('password');
-      if(togglePass){
-        togglePass.addEventListener('click', () => {
-          const isHidden = passInput.type === 'password';
-          passInput.type = isHidden ? 'text' : 'password';
-          toggleIcon.className = isHidden ? 'fas fa-eye-slash' : 'fas fa-eye';
-        });
-      }
-    })();
-  </script>
+    <script>
+        (function(){
+          const togglePass = document.getElementById('togglePass');
+          const toggleIcon = document.getElementById('toggleIcon');
+          const passInput  = document.getElementById('password');
+          if(togglePass){
+            togglePass.addEventListener('click', () => {
+              const isHidden = passInput.type === 'password';
+              passInput.type = isHidden ? 'text' : 'password';
+              toggleIcon.className = isHidden ? 'fas fa-eye-slash' : 'fas fa-eye';
+            });
+          }
+        })();
+    </script>
+    @* <script type="module" src="/js/pages/login.js"></script> *@
 }
