@@ -51,5 +51,20 @@ namespace inventory.Controllers
             return Ok(new { status = ok });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> PostTypeEquipment([FromBody] TypeEquipmentUpdateDto dto)
+        {
+            if (dto == null) return BadRequest();
+            var ok = await _catalogService.InsertTypeEquipment(dto.Name, dto.Prefix, dto.EditPrefix, dto.StockMin, dto.StockMax);
+            return Ok(new { status = ok });
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> PutTypeEquipment([FromBody] TypeEquipmentUpdateDto dto)
+        {
+            if (dto == null) return BadRequest();
+            var ok = await _catalogService.UpdateTypeEquipment(dto.Id, dto.Name, dto.Prefix, dto.EditPrefix, dto.StockMin, dto.StockMax);
+            return Ok(new { status = ok });
+        }
     }
 }

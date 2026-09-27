@@ -9,5 +9,8 @@ namespace inventory.Services
         Task<bool> InsertCatalog(string code, string name, int brandId);
         Task<bool> UpdateCatalog(string code, int id, string name, int brandId);
         Task<bool> ActiveCatalog(string code, string ids, bool active);
+
+        Task<bool> InsertTypeEquipment(string name, string prefix, bool editPrefix, int stockMin, int stockMax);
+        Task<bool> UpdateTypeEquipment(int id, string name, string prefix, bool editPrefix, int stockMin, int stockMax);
     }
 }

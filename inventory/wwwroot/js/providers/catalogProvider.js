@@ -85,6 +85,60 @@ const CATALOG = {
                 console.error("Hubo un problema:", error);
             });
         return res;
+    },
+
+    insertTypeEquipment: async (name, prefix, editPrefix, stockMin, stockMax) => {
+        const data = { name, prefix, editPrefix, stockMin, stockMax }
+
+        const res = await fetch(`${BASE_URL}/PostTypeEquipment`, {
+            method: "POST", // 1. Método HTTP
+            headers: {
+                "Content-Type": "application/json" // 2. Cabecera crucial
+            },
+            body: JSON.stringify(data) // 3. El cuerpo convertido a string
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Error en la solicitud");
+                }
+                return response.json(); // Convierte la respuesta del servidor a JS
+            })
+            .then(data => {
+                console.log("Éxito:", data);
+                return data;
+            })
+            .catch(error => {
+                console.error("Hubo un problema:", error);
+            });
+
+        return res;
+    },
+
+    updateTypeEquipment: async (id, name, prefix, editPrefix, stockMin, stockMax) => {
+        const data = { id, name, prefix, editPrefix, stockMin, stockMax }
+
+        const res = await fetch(`${BASE_URL}/PutTypeEquipment`, {
+            method: "PUT", // 1. Método HTTP
+            headers: {
+                "Content-Type": "application/json" // 2. Cabecera crucial
+            },
+            body: JSON.stringify(data) // 3. El cuerpo convertido a string
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Error en la solicitud");
+                }
+                return response.json(); // Convierte la respuesta del servidor a JS
+            })
+            .then(data => {
+                console.log("Éxito:", data);
+                return data;
+            })
+            .catch(error => {
+                console.error("Hubo un problema:", error);
+            });
+
+        return res;
     }
 }
 

@@ -11,7 +11,7 @@
 
         </div>
         <div>
-            <button class="btn btn-neutral btn-xs btnAdd" onclick="mdlChange.showModal()" title="Agregar">
+            <button class="btn btn-neutral btn-xs @(ViewBag.menu != "typeEquipment" ? "btnAdd" : "btnAddEquipment")" onclick="mdlChange.showModal()" title="Agregar">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
@@ -51,6 +51,11 @@
                 @if (ViewBag.Menu == "models")
                 {   
                     <th class="catalog-brand">Marca</th>
+                }else if(ViewBag.Menu == "typeEquipment"){
+                  <th class="catalog-typeEquipment-prefix">Prefijo</th>  
+                  <th class="catalog-typeEquipment-prefixEdit">¿Prefijo editable?</th>  
+                  <th class="catalog-typeEquipment-stockMin">Stock mínimo</th>  
+                  <th class="catalog-typeEquipment-stockMax">Stock máximo</th>  
                 }
                 <th class="catalog-state">
                     <div class="flex items-center gap-1">
@@ -87,18 +92,48 @@
         <h3 class="text-lg font-bold mdl-title"></h3>
         <div class="modal-action mdl-body">
             <form method="dialog" class="frm-mdlChange" style="width:100%;">
-                <div style="margin-bottom:2rem;">
-                    <label>Nombre:</label>
-                    <input type="text" class="frm-name" />
-                </div>
-                @if (ViewBag.Menu == "models")
-                {
+                <div class="frm-item">
                     <div style="margin-bottom:2rem;">
-                        <label>Marca:</label>
-                        <select class="list-brands" style="width: 40%;">
-                        </select>
+                        <label>Nombre:</label>
+                        <input type="text" class="frm-name" />
                     </div>
-                }
+                    @if (ViewBag.Menu == "models")
+                        {
+                            <div style="margin-bottom:2rem; margin-left: 1rem;">
+                                <label>Marca:</label>
+                                <select class="list-brands">
+                                </select>
+                            </div>
+                        }
+                        else if (ViewBag.Menu == "typeEquipment")
+                        {
+                            <div style="margin-bottom: 2rem;">
+                                <label>Prefijo:</label>
+                                <input type="text" class="frm-typeEquipment-prefix" />
+                            </div>
+                        }
+                    </div>
+                    @if (ViewBag.Menu == "typeEquipment")
+                    {
+                <div class="frm-item">
+                        <div style="margin-bottom: 2rem;">
+                            <input type="checkbox" class="checkbox frm-typeEquipment-editPrefix" />
+                            <label>¿Prefijo editable?</label>
+                        </div>
+                    </div>
+
+                <div class="frm-item">
+                        <div style="margin-bottom: 2rem;">
+                            <label>Stock mínimo</label>
+                            <input type="number" class="frm-typeEquipment-stockMin" min="0" />
+                        </div>
+
+                        <div style="margin-bottom: 2rem;">
+                            <label>Stock máximo</label>
+                            <input type="number" class="frm-typeEquipment-stockMax" min="0" />
+                        </div>
+                    </div>
+                    }
                 <div class="frm-section-button" style="text-align:right;">
                     <button type="button" class="btn btn-success text-white btnSaveChange">Guardar</button>
                     <button class="btn">Cancelar</button>

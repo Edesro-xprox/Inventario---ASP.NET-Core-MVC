@@ -43,6 +43,17 @@ namespace inventory.Services
 
         public async Task<bool> InsertCatalog(string code, string name, int brandId)
         {
+            var catalog = await GetCatalog(code);
+            
+            bool exists;
+            
+            if (code != "models")
+            {
+                exists = catalog.Any(c => (string)c["vName"] == name);
+            }else{
+                exists = catalog.Any(c => (string)c["vName"] == name && (int)c["iBrandId"] == brandId);    
+            }
+
             var rows = await _catalogRepository.insertCatalog(code, name, brandId);
             return rows > 0;
         }
@@ -56,6 +67,18 @@ namespace inventory.Services
         public async Task<bool> ActiveCatalog(string code, string ids, bool active)
         {
             var rows = await _catalogRepository.activeCatalog(code, ids, active);
+            return rows > 0;
+        }
+
+        public async Task<bool> InsertTypeEquipment(string name, string prefix, bool editPrefix, int stockMin, int stockMax)
+        {
+            var rows = await _catalogRepository.insertTypeEquipment(name, prefix, editPrefix, stockMin, stockMax);
+            return rows > 0;
+        }
+
+        public async Task<bool> UpdateTypeEquipment(int id, string name, string prefix, bool editPrefix, int stockMin, int stockMax)
+        {
+            var rows = await _catalogRepository.updateTypeEquipment(id, name, prefix, editPrefix, stockMin, stockMax);
             return rows > 0;
         }
     }

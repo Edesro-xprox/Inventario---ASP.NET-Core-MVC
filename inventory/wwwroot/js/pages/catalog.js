@@ -4,7 +4,7 @@ import NOTIFICATIONS from '../utils/notifications.js';
 class Catalog {
     constructor() {
         this.code = null;
-        this.data = null;
+        this.data = null; 
     }
 
     // initialize catalog using the current DOM data-menu element
@@ -32,7 +32,7 @@ class Catalog {
         try {
             const res = await CATALOG.insertCatalog(code, name, brandId);
             if (res.status) {
-                console.log('Petición insert con éxito');
+                NOTIFICATIONS.toast('success', 'Registro creado exitosamente')
                 return res.status;
             }
         } catch (error) {
@@ -45,7 +45,7 @@ class Catalog {
             if (!code) return;
             const res = await CATALOG.updateCatalog(code, id, name, brandId);
             if (res.status) {
-                console.log('Petición update con éxito');
+                NOTIFICATIONS.toast('success', 'Registro actualizado exitosamente')
                 return res.status;
             }
         } catch (error) {
@@ -57,11 +57,35 @@ class Catalog {
         try {
             const res = await CATALOG.activeCatalog(code, ids, active);
             if (res.status) {
-                console.log('Petición patch con éxito');
+                NOTIFICATIONS.toast('success', `Registro(s) ${active ? 'activado(s)' : 'desactivado(s)'}`)
                 return res.status;
             }
         } catch (error) {
             console.error('Error fetching catalog data:', error);
+        }
+    }
+
+    async postTypeEquipment(name, prefix, editPrefix, stockMin, stockMax) {
+        try {
+            const res = await CATALOG.insertTypeEquipment(name, prefix, editPrefix, stockMin, stockMax);
+            if (res.status) {
+                NOTIFICATIONS.toast('success', 'Tipo de equipo creado exitosamente');
+                return res.status;
+            }
+        } catch (error) {
+            console.error('Error inserting type equipment:', error);
+        }
+    }
+
+    async putTypeEquipment(id, name, prefix, editPrefix, stockMin, stockMax) {
+        try {
+            const res = await CATALOG.updateTypeEquipment(id, name, prefix, editPrefix, stockMin, stockMax);
+            if (res.status) {
+                NOTIFICATIONS.toast('success', 'Tipo de equipo actualizado exitosamente');
+                return res.status;
+            }
+        } catch (error) {
+            console.error('Error updating type equipment:', error);
         }
     }
 

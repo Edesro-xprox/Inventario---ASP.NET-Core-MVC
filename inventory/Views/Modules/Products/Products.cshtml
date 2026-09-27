@@ -1,1 +1,45 @@
-﻿<h1>Producto en desarrollo</h1>
+﻿@{
+    ViewBag.Title = "Productos";
+}
+
+<div class="container mx-auto p-4" id="products-module">
+    <div id="product-grid">
+        <div class="flex justify-between items-center mb-4">
+            <div>
+                <button id="btn-add" class="btn btn-neutral btn-xs">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                </button>
+            </div>
+            <div class="flex items-center">
+                <input id="input-search" type="text" placeholder="Buscar..." class="input input-bordered" />
+            </div>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="table w-full">
+                <thead>
+                    <tr>
+                        <th>Código de producto</th>
+                        <th>Tipo de producto</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Proveedor</th>
+                        <th>Estado de producto</th>
+                        <th>Situación</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="products-tbody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="product-form-container" class="mt-4 hidden">
+        
+    </div>
+</div>
+
+<script type="module" src="./js/pages/products.js"></script>

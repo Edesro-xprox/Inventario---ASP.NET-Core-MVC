@@ -17,7 +17,7 @@
     text-align: justify;
 }
 
-.brandIds, .modelIds, .supplierIds, .categoryIds {
+.brandIds, .modelIds, .supplierIds, .categoryIds, .typeEquipmentIds {
     width: 18px;
     height: 18px;
 }

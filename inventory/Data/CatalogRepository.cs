@@ -89,9 +89,50 @@ namespace inventory.Data
                 command.Parameters.Add(new SqlParameter("@ids", ids));
                 command.Parameters.Add(new SqlParameter("@active", active ? 1 : 0));
 
+                if (connection.State != ConnectionState.Open) 
+                    await connection.OpenAsync();
+
+                var result = await command.ExecuteNonQueryAsync();
+                return result;
+            }
+        }
+
+        public async Task<int> insertTypeEquipment(string name, string prefix, bool editPrefix, int stockMin, int stockMax)
+        {
+            var connection = _context.Database.GetDbConnection();
+            using (var command = connection.CreateCommand())
+            {
+                command.CommandText = "spi_typeEquipment";
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add(new SqlParameter("@name", name));
+                command.Parameters.Add(new SqlParameter("@prefix", prefix));
+                command.Parameters.Add(new SqlParameter("@editPrefix", editPrefix));
+                command.Parameters.Add(new SqlParameter("@stockMin", stockMin));
+                command.Parameters.Add(new SqlParameter("@stockMax", stockMax));
+
                 if (connection.State != ConnectionState.Open)
                     await connection.OpenAsync();
 
+                var result = await command.ExecuteNonQueryAsync();
+                return result;
+            }
+        }
+
+        public async Task<int> updateTypeEquipment(int id, string name, string prefix, bool editPrefix, int stockMin, int stockMax)
+        {
+            var connection = _context.Database.GetDbConnection();
+            using (var command = connection.CreateCommand())
+            {
+                command.CommandText = "spu_typeEquipment";
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add(new SqlParameter("@id", id));
+                command.Parameters.Add(new SqlParameter("@name", name));
+                command.Parameters.Add(new SqlParameter("@prefix", prefix));
+                command.Parameters.Add(new SqlParameter("@editPrefix", editPrefix));
+                command.Parameters.Add(new SqlParameter("@stockMin", stockMin));
+                command.Parameters.Add(new SqlParameter("@stockMax", stockMax));
+                if (connection.State != ConnectionState.Open)
+                    await connection.OpenAsync();
                 var result = await command.ExecuteNonQueryAsync();
                 return result;
             }

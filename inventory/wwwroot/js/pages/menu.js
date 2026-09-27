@@ -82,11 +82,16 @@ class Menus {
             }
 
             const html = await res.text();
-
+            
             $('.nameMenu').text(
                 menu == 'brands' ? 'Marcas' :
                     menu == 'models' ? 'Modelos' :
-                        menu == 'suppliers' ? 'Proveedores' : 'Categorias'
+                        menu == 'suppliers' ? 'Proveedores' :
+                            menu == 'categories' ? 'Categorias' :
+                                menu == 'configuration' ? 'Configuración' :
+                                    menu == 'dashboard' ? 'Dashboard' :
+                                        menu == 'consumables' ? 'Consumibles' : 
+                                            menu == 'typeEquipment' ? 'Tipo de equipos' : 'Productos'
             );
 
             $('.main-content').html(html);

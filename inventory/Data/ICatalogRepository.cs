@@ -11,5 +11,8 @@ namespace inventory.Data
         Task<int> insertCatalog(string code, string name, int brandId);
         Task<int> updateCatalog(string code, int id, string name, int brandId);
         Task<int> activeCatalog(string code, string ids, bool active);
+
+        Task<int> insertTypeEquipment(string name, string prefix, bool editPrefix, int stockMin, int stockMax);
+        Task<int> updateTypeEquipment(int id, string name, string prefix, bool editPrefix, int stockMin, int stockMax);
     }
 }

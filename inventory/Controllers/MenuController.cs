@@ -27,7 +27,7 @@ namespace inventory.Controllers
 
             return menu switch
             {
-                "models" or "brands" or "categories" or "suppliers" => PartialView("~/Views/Modules/Catalog/Catalog.cshtml"),
+                "typeEquipment" or "models" or "brands" or "categories" or "suppliers" => PartialView("~/Views/Modules/Catalog/Catalog.cshtml"),
                 "dashboard" => PartialView("~/Views/Modules/Dashboard/Dashboard.cshtml"),
                 "configuration" => PartialView("~/Views/Modules/Configuration/Configuration.cshtml"),
                 "inventory" => PartialView("~/Views/Modules/Inventory/Inventory.cshtml"),

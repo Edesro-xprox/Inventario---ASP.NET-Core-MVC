@@ -1,5 +1,12 @@
 .frm-mdlChange {
+    display: flex;
+    flex-direction: column;
     width: 100%;
+}
+
+.frm-item{
+    display: flex;
+    flex-direction: row;
 }
 
 .frm-section-button {
